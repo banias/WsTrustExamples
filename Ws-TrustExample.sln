@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ws-TrustHost", "Ws-Trust\Ws-TrustHost.csproj", "{868C730E-E196-4C53-BB2D-F8E0BEA7636F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ws-TrustClient", "Ws-TrustClient\Ws-TrustClient.csproj", "{E2BD6AC0-5754-47E2-B039-49E7655178BA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{868C730E-E196-4C53-BB2D-F8E0BEA7636F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{868C730E-E196-4C53-BB2D-F8E0BEA7636F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{868C730E-E196-4C53-BB2D-F8E0BEA7636F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{868C730E-E196-4C53-BB2D-F8E0BEA7636F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2BD6AC0-5754-47E2-B039-49E7655178BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2BD6AC0-5754-47E2-B039-49E7655178BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2BD6AC0-5754-47E2-B039-49E7655178BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2BD6AC0-5754-47E2-B039-49E7655178BA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
