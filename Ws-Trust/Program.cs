@@ -14,7 +14,7 @@ namespace Ws_Trust
 {
     class Program
     {
-        private const string hostAddress = "http://localhost:8080/Sts";
+        private const string hostAddress = "http://localhost:80/Sts";
 
         static void Main(string[] args)
         {
@@ -24,6 +24,7 @@ namespace Ws_Trust
             host.AddServiceEndpoint(typeof(IWSTrust13SyncContract), GetBinding(), "");
             host.Credentials.ServiceCertificate.Certificate = StsHelper.GetCertificate();
             host.Description.Behaviors.Find<ServiceDebugBehavior>().IncludeExceptionDetailInFaults = true;
+            host.Description.Behaviors.Find<ServiceBehaviorAttribute>().AddressFilterMode = AddressFilterMode.Any;          
             host.Open();
             Console.WriteLine("host started " + hostAddress);
             Console.ReadKey();

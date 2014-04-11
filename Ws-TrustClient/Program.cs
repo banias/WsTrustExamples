@@ -12,7 +12,7 @@ namespace Ws_TrustClient
 {
     class Program
     {
-        private const string Address = "http://localhost:8080/Sts";
+        private const string Address = "http://localhost:81/Ws-trust.svc";
         static void Main(string[] args)
         {
             Console.WriteLine("Press q to quit the program, press any key to send request");

@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Factory="WCFServiceWebRole1.WsTrustHostFactory" Service="Ws_Trust.Service.StsConfiguration" %>
