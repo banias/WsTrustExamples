@@ -6,6 +6,7 @@ using System.ServiceModel.Activation;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Security;
+using System.ServiceModel.Security.Tokens;
 using System.Web;
 using Ws_Trust.Service;
 
@@ -32,22 +33,24 @@ namespace WCFServiceWebRole1
          private static Binding GetBinding()
          {
              var result = new WS2007HttpBinding();
-             result.Security.Mode = SecurityMode.Message;
+             result.Security.Mode = SecurityMode.TransportWithMessageCredential;
              result.Security.Message.ClientCredentialType = MessageCredentialType.UserName;
-             //return result;
-
+             result.Security.Message.EstablishSecurityContext = false;
+             result.Security.Message.NegotiateServiceCredential = false;
+             return result;
+             
              var sbe = SecurityBindingElement.CreateUserNameForSslBindingElement(false);
              sbe.MessageSecurityVersion =
                  MessageSecurityVersion
                      .WSSecurity11WSTrust13WSSecureConversation13WSSecurityPolicy12BasicSecurityProfile10;
              var sct = SecurityBindingElement.CreateSecureConversationBindingElement(sbe, false);
-             //sbe.EndpointSupportingTokenParameters.Signed.Add(new UserNameSecurityTokenParameters());
+           //  sbe.EndpointSupportingTokenParameters.Endorsing[0] = new UserNameSecurityTokenParameters();
              sct.MessageSecurityVersion =
                  MessageSecurityVersion
                      .WSSecurity11WSTrust13WSSecureConversation13WSSecurityPolicy12BasicSecurityProfile10;
              var bindingElementCollection = new BindingElementCollection
                                                {
-                                                    sct,
+                                                    sbe,
 
                                                    new TextMessageEncodingBindingElement(),
 
@@ -60,6 +63,12 @@ namespace WCFServiceWebRole1
              var customBinding = new CustomBinding(bindingElementCollection);
 
              return customBinding;
+
+             var basicBinding = new BasicHttpBinding();
+             //basicBinding.Security.Mode = BasicHttpSecurityMode.TransportWithMessageCredential;
+             //result.Security.Message.ClientCredentialType = MessageCredentialType.UserName;
+
+             return basicBinding;
          }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Security;
+using System.ServiceModel.Security.Tokens;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -12,9 +13,9 @@ using NUnit.Framework;
 namespace Ws_TrustTests
 {
     [TestFixture]
-    public class WsTrustTests 
+    public class WsTrustAzureTests 
     {
-        private const string Address = "http://localhost:8888/Ws-trust.svc";
+        private const string Address = "https://127.0.0.1:8888/Ws-trust.svc";
 
         [SetUp]
         public void PrepareTest()
@@ -30,41 +31,48 @@ namespace Ws_TrustTests
             channelFactpry.Credentials.UserName.Password = "passwd";
 
             var channel = channelFactpry.CreateChannel(new EndpointAddress(Address));
-            var token = channel.Issue(new RequestSecurityToken()
+            RequestSecurityTokenResponse rstr = null;
+            channel.Issue(new RequestSecurityToken()
             {
+
                 RequestType = RequestTypes.Issue,
                 AppliesTo = new EndpointReference("http://myDestinationServer/Service"),
-            });
+            }, out rstr);
 
-            Assert.That(token, Is.Not.Null);
+            Assert.That(rstr.RequestedSecurityToken, Is.Not.Null);
         }
 
         [Test]
         public void TestLoginInParallelLoop()
         {
-            Assert.That(
+            Assert.That(() =>
                 Parallel.For(0, 100, i => { TestSingleLogin(); }), Throws.Nothing);
         }
 
         private static Binding GetBinding()
         {
             var result = new WS2007HttpBinding();
-            result.Security.Mode = SecurityMode.Message;
+            result.Security.Mode = SecurityMode.TransportWithMessageCredential;
             result.Security.Message.ClientCredentialType = MessageCredentialType.UserName;
-            //return result;
+            result.Security.Message.EstablishSecurityContext = false;
+            result.Security.Message.NegotiateServiceCredential = false;
+            //result.UseDefaultWebProxy = false;
+            //result.BypassProxyOnLocal = false;
+            //result.ProxyAddress = new Uri("https://127.0.0.1:8888");
+            return result;
 
             var sbe = SecurityBindingElement.CreateUserNameForSslBindingElement(false);
             sbe.MessageSecurityVersion =
                 MessageSecurityVersion
                     .WSSecurity11WSTrust13WSSecureConversation13WSSecurityPolicy12BasicSecurityProfile10;
             var sct = SecurityBindingElement.CreateSecureConversationBindingElement(sbe, false);
-            //sbe.EndpointSupportingTokenParameters.Signed.Add(new UserNameSecurityTokenParameters());
+           // sbe.EndpointSupportingTokenParameters.Endorsing.Add(new UserNameSecurityTokenParameters());
             sct.MessageSecurityVersion =
                 MessageSecurityVersion
                     .WSSecurity11WSTrust13WSSecureConversation13WSSecurityPolicy12BasicSecurityProfile10;
             var bindingElementCollection = new BindingElementCollection
                                                {
-                                                    sct,
+                                                    sbe,
 
                                                    new TextMessageEncodingBindingElement(),
 
@@ -77,6 +85,10 @@ namespace Ws_TrustTests
             var customBinding = new CustomBinding(bindingElementCollection);
 
             return customBinding;
+            var basicBinding = new BasicHttpBinding();
+            basicBinding.Security.Mode = BasicHttpSecurityMode.None;
+            //result.Security.Message.ClientCredentialType = MessageCredentialType.UserName;
+            return basicBinding;
         }
     }
 }

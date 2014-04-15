@@ -16,7 +16,7 @@ namespace Ws_Trust.Service
             TokenIssuerName = "CustomSts";
            
             SecurityTokenService = typeof (StsService);
-            ServiceCertificate = StsHelper.GetCertificate();    
+            ServiceCertificate = StsHelper.GetCertificate();            
 
             SecurityTokenHandlers.Remove(SecurityTokenHandlers.OfType<WindowsUserNameSecurityTokenHandler>().Single());
             SecurityTokenHandlers.AddOrReplace(new UserPasswordSecurityTokenHandler());
